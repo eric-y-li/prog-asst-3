@@ -77,7 +77,29 @@ class maxHeap {
     }
 }
 
-public class Partition {
+class partitionAlgs {
+
+    private partitionAlgs(){};
+
+    public static int residue(int[] arr, int[] signs) {
+        int res = 0;
+        for (int i=0; i<arr.length; i++) {
+            res += arr[i]*signs[i];
+        }
+        return Math.abs(res);
+    }
+
+    public static int residuePP(int[] arr, int[] prepartition) {
+        int[] arr2 = new int[arr.length];
+        for (int j=0; j<arr.length;j++) {
+            arr2[prepartition[j]] += arr[j];
+        }
+        ArrayList<Integer> arrlist = new ArrayList<Integer>();
+        for (int j=0; j<arr.length;j++) {
+            arrlist.add(arr2[j]);
+        }
+        return kk(arrlist);
+    }
 
     public static int kk(ArrayList<Integer> arr) {
         maxHeap heap = new maxHeap(arr);
@@ -88,6 +110,66 @@ public class Partition {
         }
         return heap.getHeap().get(0);
     }
+
+    public static int repeatedRandom(int[] arr) {
+        Random r = new Random();
+        int[] rand = {-1, 1};
+
+        int[] solution = new int[arr.length];
+        for (int j=0; j<arr.length; j++) {
+            solution[j] = rand[r.nextInt(2)];
+        }
+
+        int residue = residue(arr, solution);
+
+        int[] currSolution = new int[arr.length];
+
+        int MAX_ITER = 1000;
+        for (int i=0; i<MAX_ITER; i++) {
+            for (int j=0; j<arr.length; j++) {
+                currSolution[j] = rand[r.nextInt(2)];
+            }
+            if (residue(arr, currSolution) < residue) {
+                solution = currSolution;
+                residue = residue(arr, solution);
+            }
+        }
+
+        return residue;
+    }
+
+
+
+    public static int repeatedRandomPP(int[] arr) {
+        Random r = new Random();
+
+        int[] solution = new int[arr.length];
+        for (int j=0; j<arr.length; j++) {
+            solution[j] = r.nextInt(arr.length-1);
+        }
+
+        int residue = residuePP(arr, solution);
+
+        int[] currPrePartition = new int[arr.length];
+
+        int MAX_ITER = 1000;
+        for (int i=0; i<MAX_ITER; i++) {
+            for (int j=0; j<arr.length; j++) {
+                currPrePartition[j] = r.nextInt(arr.length-1)+1;
+            }
+            if (residuePP(arr, currPrePartition) < residue) {
+                solution = currPrePartition;
+                residue = residuePP(arr, solution);
+            }
+        }
+
+        return residue;
+    }
+}
+
+public class Partition {
+
+
 
     public static void heapTests() {
         maxHeap heap = new maxHeap();
@@ -111,6 +193,7 @@ public class Partition {
     public static void main(String[] args) {
         // heapTests();
         ArrayList<Integer> nums = new ArrayList<Integer>(Arrays.asList(10,8,7,6,5));
-        System.out.println(kk(nums));
+        System.out.println(partitionAlgs.kk(nums));
+        System.out.println(partitionAlgs.repeatedRandom(new int[] {10,8,7,6,5}));
     }
 }
