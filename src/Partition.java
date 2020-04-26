@@ -1,5 +1,18 @@
 import java.util.*;
 
+class randomArray {
+    private randomArray(){}
+
+    public static int[] generateArray(int size) {
+        Random r = new Random();
+        int[] arr = new int[size];
+        for (int i=1; i<size; i++) {
+            arr[i] = r.nextInt((int)(Math.pow(2,29)));
+        }
+        return arr;
+    }
+}
+
 class maxHeap {
     private ArrayList<Integer> heap;
 
@@ -94,7 +107,7 @@ class partitionAlgs {
         for (int j=0; j<arr.length;j++) {
             arr2[prepartition[j]] += arr[j];
         }
-        ArrayList<Integer> arrlist = new ArrayList<Integer>();
+        ArrayList<Integer> arrlist = new ArrayList<>();
         for (int j=0; j<arr.length;j++) {
             arrlist.add(arr2[j]);
         }
@@ -120,8 +133,6 @@ class partitionAlgs {
             solution[j] = rand[r.nextInt(2)];
         }
 
-        int residue = residue(arr, solution);
-
         int[] currSolution = new int[arr.length];
 
         int MAX_ITER = 1000;
@@ -129,47 +140,137 @@ class partitionAlgs {
             for (int j=0; j<arr.length; j++) {
                 currSolution[j] = rand[r.nextInt(2)];
             }
-            if (residue(arr, currSolution) < residue) {
+            if (residue(arr, currSolution) < residue(arr, solution)) {
                 solution = currSolution;
-                residue = residue(arr, solution);
             }
         }
 
-        return residue;
+        return residue(arr, solution);
     }
-
-
 
     public static int repeatedRandomPP(int[] arr) {
         Random r = new Random();
 
         int[] solution = new int[arr.length];
         for (int j=0; j<arr.length; j++) {
-            solution[j] = r.nextInt(arr.length-1);
+            solution[j] = r.nextInt(arr.length);
         }
-
-        int residue = residuePP(arr, solution);
 
         int[] currPrePartition = new int[arr.length];
 
         int MAX_ITER = 1000;
         for (int i=0; i<MAX_ITER; i++) {
             for (int j=0; j<arr.length; j++) {
-                currPrePartition[j] = r.nextInt(arr.length-1)+1;
+                currPrePartition[j] = r.nextInt(arr.length);
             }
-            if (residuePP(arr, currPrePartition) < residue) {
+            if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
                 solution = currPrePartition;
-                residue = residuePP(arr, solution);
             }
         }
 
+        return residuePP(arr, solution);
+    }
+
+    public static int hillClimb(int[] arr) {
+        Random r = new Random();
+        int[] rand = {-1, 1};
+
+        int[] solution = new int[arr.length];
+        for (int j=0; j<arr.length; j++) {
+            solution[j] = rand[r.nextInt(2)];
+        }
+
+        int[] currSolution = solution;
+
+        int MAX_ITER = 1000;
+        for (int i=0; i<MAX_ITER; i++) {
+            int ind1 = r.nextInt(arr.length);
+            int ind2;
+            do {
+                ind2 = r.nextInt(arr.length);
+            } while(ind1 == ind2);
+            currSolution[ind1] *= -1;
+            if (r.nextInt(2)==1) currSolution[ind2] *= -1;
+            if (residue(arr, currSolution) < residue(arr, solution)) {
+                solution = currSolution;
+            }
+        }
+        return residue(arr, solution);
+    }
+
+    public static int hillClimbPP(int[] arr) {
+        Random r = new Random();
+
+        int[] solution = new int[arr.length];
+        for (int j=0; j<arr.length; j++) {
+            solution[j] = r.nextInt(arr.length);
+        }
+
+        int residue = residuePP(arr, solution);
+
+        int[] currPrePartition = solution;
+
+        int MAX_ITER = 1000;
+        for (int i=0; i<MAX_ITER; i++) {
+            int ind1 = r.nextInt(arr.length);
+            int ind2;
+            do {
+                ind2 = r.nextInt(arr.length);
+            } while(solution[ind1] == ind2);
+            currPrePartition[ind1] = ind2;
+            if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
+                residue = residuePP(arr, currPrePartition);
+                solution = currPrePartition;
+            }
+        }
         return residue;
+    }
+
+    public static double cooling(int iter) {
+       return Math.pow(10,10) * Math.pow(0.8, iter/300);
+    }
+
+    public static int simAnneal(int[] arr) {
+        Random r = new Random();
+        int[] rand = {-1,1};
+
+        int[] solution = new int[arr.length];
+        for (int j=0; j<arr.length; j++) {
+            solution[j] = rand[r.nextInt(2)];
+        }
+
+        int[] globalSol = solution;
+
+        int[] currSolution = solution;
+
+        int MAX_ITER = 10000;
+        for(int i=0; i<MAX_ITER; i++) {
+            int ind1 = r.nextInt(arr.length-1);
+            int ind2;
+            do {
+                ind2 = r.nextInt(arr.length-1);
+            } while(ind1 == ind2);
+            currSolution[ind1] *= -1;
+            if (r.nextInt(2)==1) currSolution[ind2] *= -1;
+            if (residue(arr, currSolution) < residue(arr, solution)) {
+                solution = currSolution;
+            }
+            else {
+                if (r.nextDouble() < Math.exp(-1*(residue(arr, currSolution)-residue(arr, solution))/cooling(i))) {
+                    solution = currSolution;
+                }
+            }
+            if (residue(arr, solution) < residue(arr, globalSol)) {
+                globalSol = solution;
+            }
+        }
+
+        return residue(arr, globalSol);
+
     }
 }
 
 public class Partition {
-
-
 
     public static void heapTests() {
         maxHeap heap = new maxHeap();
@@ -191,9 +292,15 @@ public class Partition {
     }
 
     public static void main(String[] args) {
+        //System.out.println(Arrays.toString(randomArray.generateArray(100)));
+        //System.out.println(partitionAlgs.residuePP(new int[] {10,8,7,6,5}, new int[] {0,1,1,3,4}));
         // heapTests();
-        ArrayList<Integer> nums = new ArrayList<Integer>(Arrays.asList(10,8,7,6,5));
-        System.out.println(partitionAlgs.kk(nums));
-        System.out.println(partitionAlgs.repeatedRandom(new int[] {10,8,7,6,5}));
+        // ArrayList<Integer> nums = new ArrayList<Integer>(Arrays.asList(10,8,7,6,5));
+        int[] randArr = randomArray.generateArray(100);
+        System.out.println(partitionAlgs.repeatedRandom(randArr));
+        System.out.println(partitionAlgs.hillClimb(randArr));
+        System.out.println(partitionAlgs.simAnneal(randArr));
+        // System.out.println(partitionAlgs.kk(nums));
+        // System.out.println(partitionAlgs.repeatedRandom(new int[] {10,8,7,6,5}));
     }
 }
