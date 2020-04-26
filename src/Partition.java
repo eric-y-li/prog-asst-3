@@ -95,8 +95,8 @@ class PartitionAlgs {
     private PartitionAlgs(){};
 
 
-    public static int residue(int[] arr, int[] signs) {
-        int res = 0;
+    public static long residue(long[] arr, long[] signs) {
+        long res = 0;
         for (int i = 0; i < arr.length; i++) {
             res += arr[i] * signs[i];
         }
@@ -104,116 +104,119 @@ class PartitionAlgs {
     }
 
 
-    public static int residuePP(int[] arr, int[] prepartition) {
-      int[] arr2 = new int[arr.length];
+    public static long residuePP(long[] arr, long[] prepartition) {
+      long[] arr2 = new long[arr.length];
       for (int j = 0; j < arr.length;j++) {
           arr2[prepartition[j]] += arr[j];
       }
-      ArrayList<Integer> arrlist = new ArrayList<>();
-      for (int j = 0; j < arr.length;j++) {
+      ArrayList<Long> arrlist = new ArrayList<Long>();
+      for (int j = 0; j < arr.length; j++) {
           arrlist.add(arr2[j]);
       }
       return kk(arrlist);
     }
 
 
-    public static int kk(ArrayList<Integer> arr) {
+    public static long kk(ArrayList<Long> arr) {
       MaxHeap heap = new MaxHeap(arr);
       while(heap.getSize() > 1) {
-          int largest = heap.deleteMax();
-          int second = heap.deleteMax();
-          heap.insert(largest-second);
+          long largest = heap.deleteMax();
+          long second = heap.deleteMax();
+          heap.insert(largest - second);
       }
       return heap.getHeap().get(0);
     }
 
 
-    public static int repeatedRandom(int[] arr) {
+    public static long repeatedRandom(long[] arr) {
         Random r = new Random();
-        int[] rand = {-1, 1};
+        long[] rand = {-1, 1};
 
-        int[] solution = new int[arr.length];
+        long[] solution = new long[arr.length];
         for (int j = 0; j < arr.length; j++) {
-            solution[j] = rand[r.nextInt(2)];
+          solution[j] = rand[r.nextInt(2)];
         }
 
-        int[] currSolution = new int[arr.length];
+        long[] currSolution = new long[arr.length];
 
         for (int i = 0; i < MAX_ITER; i++) {
-            for (int j=0; j<arr.length; j++) {
-                currSolution[j] = rand[r.nextInt(2)];
-            }
-            if (residue(arr, currSolution) < residue(arr, solution)) {
-                solution = currSolution;
-            }
+          for (int j = 0; j < arr.length; j++) {
+            currSolution[j] = rand[r.nextInt(2)];
+          }
+          if (residue(arr, currSolution) < residue(arr, solution)) {
+              solution = currSolution;
+          }
         }
 
         return residue(arr, solution);
     }
 
 
-    public static int repeatedRandomPP(int[] arr) {
+    public static long repeatedRandomPP(long[] arr) {
         Random r = new Random();
 
-        int[] solution = new int[arr.length];
-        for (int j=0; j<arr.length; j++) {
-            solution[j] = r.nextInt(arr.length);
+        long[] solution = new long[arr.length];
+        for (int j = 0; j < arr.length; j++) {
+          Integer z = new Integer(r.nextInt(arr.length));
+          solution[j] = z.longValue();
         }
 
-        int[] currPrePartition = new int[arr.length];
+        long[] currPrePartition = new long[arr.length];
 
-        for (int i=0; i<MAX_ITER; i++) {
-            for (int j=0; j<arr.length; j++) {
-                currPrePartition[j] = r.nextInt(arr.length);
-            }
-            if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
-                solution = currPrePartition;
-            }
+        for (int i = 0; i < MAX_ITER; i++) {
+          for (int j = 0; j < arr.length; j++) {
+            Integer z = new Integer(r.nextInt(arr.length));
+            currPrePartition[j] = z.longValue();
+          }
+          if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
+            solution = currPrePartition;
+          }
         }
 
         return residuePP(arr, solution);
     }
 
 
-    public static int hillClimb(int[] arr) {
+    public static long hillClimb(long[] arr) {
         Random r = new Random();
-        int[] rand = {-1, 1};
+        long[] rand = {-1, 1};
 
-        int[] solution = new int[arr.length];
-        for (int j=0; j<arr.length; j++) {
-            solution[j] = rand[r.nextInt(2)];
+        long[] solution = new long[arr.length];
+        for (int j = 0; j < arr.length; j++) {
+          solution[j] = rand[r.nextInt(2)];
         }
 
-        int[] currSolution = solution;
+        long[] currSolution = solution;
 
-        for (int i=0; i<MAX_ITER; i++) {
-            int ind1 = r.nextInt(arr.length);
-            int ind2;
-            do {
-                ind2 = r.nextInt(arr.length);
-            } while(ind1 == ind2);
-            currSolution[ind1] *= -1;
-            if (r.nextInt(2)==1) currSolution[ind2] *= -1;
-            if (residue(arr, currSolution) < residue(arr, solution)) {
-                solution = currSolution;
-            }
+        for (int i = 0; i < MAX_ITER; i++) {
+          int ind1 = r.nextInt(arr.length);
+          int ind2;
+          do {
+            ind2 = r.nextInt(arr.length);
+          } while(ind1 == ind2);
+          currSolution[ind1] *= -1;
+          if (r.nextInt(2) == 1) currSolution[ind2] *= -1;
+          if (residue(arr, currSolution) < residue(arr, solution)) {
+            solution = currSolution;
+          }
         }
         return residue(arr, solution);
     }
 
-    public static int hillClimbPP(int[] arr) {
+    public static long hillClimbPP(long[] arr) {
         Random r = new Random();
 
-        int[] solution = new int[arr.length];
-        for (int j=0; j<arr.length; j++) {
-            solution[j] = r.nextInt(arr.length);
+        long[] solution = new long[arr.length];
+        for (int j = 0; j < arr.length; j++) {
+          Integer z = new Integer(r.nextInt(arr.length));
+          solution[j] = z.longValue();
         }
 
-        int residue = residuePP(arr, solution);
+        long residue = residuePP(arr, solution);
 
-        int[] currPrePartition = solution;
+        long[] currPrePartition = solution;
 
-        for (int i=0; i<MAX_ITER; i++) {
+        for (int i = 0; i < MAX_ITER; i++) {
             int ind1 = r.nextInt(arr.length);
             int ind2;
             do {
@@ -234,57 +237,58 @@ class PartitionAlgs {
     }
 
 
-    public static int simAnneal(int[] arr) {
-        Random r = new Random();
-        int[] rand = {-1,1};
+    public static long simAnneal(long[] arr) {
+      Random r = new Random();
+      long[] rand = {-1,1};
 
-        int[] solution = new int[arr.length];
-        for (int j=0; j<arr.length; j++) {
-            solution[j] = rand[r.nextInt(2)];
+      long[] solution = new long[arr.length];
+      for (int j = 0; j < arr.length; j++) {
+          solution[j] = rand[r.nextInt(2)];
+      }
+
+      long[] globalSol = solution;
+
+      long[] currSolution = solution;
+
+      for(int i = 0; i < MAX_ITER; i++) {
+        int ind1 = r.nextInt(arr.length-1);
+        int ind2;
+        do {
+          ind2 = r.nextInt(arr.length-1);
+        } while(ind1 == ind2);
+        currSolution[ind1] *= -1;
+        if (r.nextInt(2) == 1) currSolution[ind2] *= -1;
+        if (residue(arr, currSolution) < residue(arr, solution)) {
+          solution = currSolution;
         }
-
-        int[] globalSol = solution;
-
-        int[] currSolution = solution;
-
-        for(int i=0; i<MAX_ITER; i++) {
-            int ind1 = r.nextInt(arr.length-1);
-            int ind2;
-            do {
-                ind2 = r.nextInt(arr.length-1);
-            } while(ind1 == ind2);
-            currSolution[ind1] *= -1;
-            if (r.nextInt(2)==1) currSolution[ind2] *= -1;
-            if (residue(arr, currSolution) < residue(arr, solution)) {
-                solution = currSolution;
-            }
-            else {
-                if (r.nextDouble() < Math.exp(-1*(residue(arr, currSolution)-residue(arr, solution))/cooling(i))) {
-                    solution = currSolution;
-                }
-            }
-            if (residue(arr, solution) < residue(arr, globalSol)) {
-                globalSol = solution;
-            }
+        else {
+          if (r.nextDouble() < Math.exp(-(residue(arr, currSolution) -
+            residue(arr, solution)) / cooling(i))) {
+            solution = currSolution;
+          }
         }
+        if (residue(arr, solution) < residue(arr, globalSol)) {
+            globalSol = solution;
+        }
+      }
 
-        return residue(arr, globalSol);
-
+      return residue(arr, globalSol);
     }
 
 
-    public static int simAnnealPP(int[] arr) {
+    public static long simAnnealPP(long[] arr) {
       Random r = new Random();
 
-      int[] solution = new int[arr.length];
-      for (int j=0; j<arr.length; j++) {
-          solution[j] = r.nextInt(arr.length);
+      long[] solution = new long[arr.length];
+      for (int j = 0; j < arr.length; j++) {
+        Integer z = new Integer(r.nextInt(arr.length))
+        solution[j] = z.longValue();
       }
 
-      int[] globalSolution = solution;
+      long[] globalSolution = solution;
 
       for (int i = 0; i < MAX_ITER; i++) {
-        int[] currentSolution = solution;
+        long[] currentSolution = solution;
 
         int j = r.nextInt(arr.length);
         int k;
@@ -293,13 +297,14 @@ class PartitionAlgs {
           k = r.nextInt(arr.length);
         } while (currentSolution[j] == k);
 
-        currentSolution[j] = k;
+        Integer z = new Integer(k);
+        currentSolution[j] = z.longValue();
 
         if (residuePP(arr, currentSolution) < residuePP(arr, solution))
           solution = currentSolution;
         else if (r.nextDouble() < Math.exp(-(residuePP(arr, currentSolution) -
           residuePP(arr, solution)) / cooling(i))) {
-          solution = currSolution;
+          solution = currentSolution;
         }
         if (residuePP(arr, solution) < residuePP(arr, globalSolution))
           globalSolution = solution;
