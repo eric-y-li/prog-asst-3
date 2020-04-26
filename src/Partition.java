@@ -1,7 +1,7 @@
 import java.util.*;
 
-class randomArray {
-    private randomArray(){}
+class RandomArray {
+    private RandomArray(){}
 
     public static int[] generateArray(int size) {
         Random r = new Random();
@@ -13,14 +13,14 @@ class randomArray {
     }
 }
 
-class maxHeap {
+class MaxHeap {
     private ArrayList<Integer> heap;
 
-    public maxHeap() {
+    public MaxHeap() {
         heap = new ArrayList<Integer>();
     }
 
-    public maxHeap(ArrayList<Integer> arr) {
+    public MaxHeap(ArrayList<Integer> arr) {
         heap = arr;
         for (int i = (heap.size()-1)/2; i>=0; i--) {
             heapify(i);
@@ -90,9 +90,9 @@ class maxHeap {
     }
 }
 
-class partitionAlgs {
+class PartitionAlgs {
 
-    private partitionAlgs(){};
+    private PartitionAlgs(){};
 
     public static int residue(int[] arr, int[] signs) {
         int res = 0;
@@ -101,6 +101,7 @@ class partitionAlgs {
         }
         return Math.abs(res);
     }
+
 
     public static int residuePP(int[] arr, int[] prepartition) {
         int[] arr2 = new int[arr.length];
@@ -114,8 +115,9 @@ class partitionAlgs {
         return kk(arrlist);
     }
 
+
     public static int kk(ArrayList<Integer> arr) {
-        maxHeap heap = new maxHeap(arr);
+        MaxHeap heap = new MaxHeap(arr);
         while(heap.getSize() > 1) {
             int largest = heap.deleteMax();
             int second = heap.deleteMax();
@@ -123,6 +125,7 @@ class partitionAlgs {
         }
         return heap.getHeap().get(0);
     }
+
 
     public static int repeatedRandom(int[] arr) {
         Random r = new Random();
@@ -148,6 +151,7 @@ class partitionAlgs {
         return residue(arr, solution);
     }
 
+
     public static int repeatedRandomPP(int[] arr) {
         Random r = new Random();
 
@@ -170,6 +174,7 @@ class partitionAlgs {
 
         return residuePP(arr, solution);
     }
+
 
     public static int hillClimb(int[] arr) {
         Random r = new Random();
@@ -268,12 +273,24 @@ class partitionAlgs {
         return residue(arr, globalSol);
 
     }
+
+
+    public static int simAnnealPP(int[] arr) {
+      Random r = new Random();
+
+      int[] solution = new int[arr.length];
+      for (int j=0; j<arr.length; j++) {
+          solution[j] = r.nextInt(arr.length);
+      }
+
+      
+    }
 }
 
 public class Partition {
 
     public static void heapTests() {
-        maxHeap heap = new maxHeap();
+        MaxHeap heap = new MaxHeap();
         heap.insert(124);
         heap.insert(109);
         heap.insert(121);
@@ -287,20 +304,20 @@ public class Partition {
         heap.insert(151);
         System.out.println(heap.toString());
 
-        maxHeap heap2 = new maxHeap(new ArrayList<Integer>(Arrays.asList(10,8,7,6,5)));
+        MaxHeap heap2 = new MaxHeap(new ArrayList<Integer>(Arrays.asList(10,8,7,6,5)));
         System.out.println(heap2.toString());
     }
 
     public static void main(String[] args) {
-        //System.out.println(Arrays.toString(randomArray.generateArray(100)));
-        //System.out.println(partitionAlgs.residuePP(new int[] {10,8,7,6,5}, new int[] {0,1,1,3,4}));
+        //System.out.println(Arrays.toString(RandomArray.generateArray(100)));
+        //System.out.println(PartitionAlgs.residuePP(new int[] {10,8,7,6,5}, new int[] {0,1,1,3,4}));
         // heapTests();
         // ArrayList<Integer> nums = new ArrayList<Integer>(Arrays.asList(10,8,7,6,5));
-        int[] randArr = randomArray.generateArray(100);
-        System.out.println(partitionAlgs.repeatedRandom(randArr));
-        System.out.println(partitionAlgs.hillClimb(randArr));
-        System.out.println(partitionAlgs.simAnneal(randArr));
-        // System.out.println(partitionAlgs.kk(nums));
-        // System.out.println(partitionAlgs.repeatedRandom(new int[] {10,8,7,6,5}));
+        int[] randArr = RandomArray.generateArray(100);
+        System.out.println(PartitionAlgs.repeatedRandom(randArr));
+        System.out.println(PartitionAlgs.hillClimb(randArr));
+        System.out.println(PartitionAlgs.simAnneal(randArr));
+        // System.out.println(PartitionAlgs.kk(nums));
+        // System.out.println(PartitionAlgs.repeatedRandom(new int[] {10,8,7,6,5}));
     }
 }
