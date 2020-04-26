@@ -251,10 +251,10 @@ class PartitionAlgs {
       long[] currSolution = solution;
 
       for(int i = 0; i < MAX_ITER; i++) {
-        int ind1 = r.nextInt(arr.length-1);
+        int ind1 = r.nextInt(arr.length);
         int ind2;
         do {
-          ind2 = r.nextInt(arr.length-1);
+          ind2 = r.nextInt(arr.length);
         } while(ind1 == ind2);
         currSolution[ind1] *= -1;
         if (r.nextInt(2) == 1) currSolution[ind2] *= -1;
