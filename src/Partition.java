@@ -94,36 +94,37 @@ class PartitionAlgs {
     private int MAX_ITER = 10000;
     private PartitionAlgs(){};
 
+
     public static int residue(int[] arr, int[] signs) {
         int res = 0;
-        for (int i=0; i<arr.length; i++) {
-            res += arr[i]*signs[i];
+        for (int i = 0; i < arr.length; i++) {
+            res += arr[i] * signs[i];
         }
         return Math.abs(res);
     }
 
 
     public static int residuePP(int[] arr, int[] prepartition) {
-        int[] arr2 = new int[arr.length];
-        for (int j=0; j<arr.length;j++) {
-            arr2[prepartition[j]] += arr[j];
-        }
-        ArrayList<Integer> arrlist = new ArrayList<>();
-        for (int j=0; j<arr.length;j++) {
-            arrlist.add(arr2[j]);
-        }
-        return kk(arrlist);
+      int[] arr2 = new int[arr.length];
+      for (int j = 0; j < arr.length;j++) {
+          arr2[prepartition[j]] += arr[j];
+      }
+      ArrayList<Integer> arrlist = new ArrayList<>();
+      for (int j = 0; j < arr.length;j++) {
+          arrlist.add(arr2[j]);
+      }
+      return kk(arrlist);
     }
 
 
     public static int kk(ArrayList<Integer> arr) {
-        MaxHeap heap = new MaxHeap(arr);
-        while(heap.getSize() > 1) {
-            int largest = heap.deleteMax();
-            int second = heap.deleteMax();
-            heap.insert(largest-second);
-        }
-        return heap.getHeap().get(0);
+      MaxHeap heap = new MaxHeap(arr);
+      while(heap.getSize() > 1) {
+          int largest = heap.deleteMax();
+          int second = heap.deleteMax();
+          heap.insert(largest-second);
+      }
+      return heap.getHeap().get(0);
     }
 
 
@@ -132,13 +133,13 @@ class PartitionAlgs {
         int[] rand = {-1, 1};
 
         int[] solution = new int[arr.length];
-        for (int j=0; j<arr.length; j++) {
+        for (int j = 0; j < arr.length; j++) {
             solution[j] = rand[r.nextInt(2)];
         }
 
         int[] currSolution = new int[arr.length];
 
-        for (int i=0; i<MAX_ITER; i++) {
+        for (int i = 0; i < MAX_ITER; i++) {
             for (int j=0; j<arr.length; j++) {
                 currSolution[j] = rand[r.nextInt(2)];
             }
