@@ -91,7 +91,7 @@ class MaxHeap {
 }
 
 class PartitionAlgs {
-
+    private int MAX_ITER = 10000;
     private PartitionAlgs(){};
 
     public static int residue(int[] arr, int[] signs) {
@@ -138,7 +138,6 @@ class PartitionAlgs {
 
         int[] currSolution = new int[arr.length];
 
-        int MAX_ITER = 1000;
         for (int i=0; i<MAX_ITER; i++) {
             for (int j=0; j<arr.length; j++) {
                 currSolution[j] = rand[r.nextInt(2)];
@@ -162,7 +161,6 @@ class PartitionAlgs {
 
         int[] currPrePartition = new int[arr.length];
 
-        int MAX_ITER = 1000;
         for (int i=0; i<MAX_ITER; i++) {
             for (int j=0; j<arr.length; j++) {
                 currPrePartition[j] = r.nextInt(arr.length);
@@ -187,7 +185,6 @@ class PartitionAlgs {
 
         int[] currSolution = solution;
 
-        int MAX_ITER = 1000;
         for (int i=0; i<MAX_ITER; i++) {
             int ind1 = r.nextInt(arr.length);
             int ind2;
@@ -215,7 +212,6 @@ class PartitionAlgs {
 
         int[] currPrePartition = solution;
 
-        int MAX_ITER = 1000;
         for (int i=0; i<MAX_ITER; i++) {
             int ind1 = r.nextInt(arr.length);
             int ind2;
@@ -231,9 +227,11 @@ class PartitionAlgs {
         return residue;
     }
 
+
     public static double cooling(int iter) {
        return Math.pow(10,10) * Math.pow(0.8, iter/300);
     }
+
 
     public static int simAnneal(int[] arr) {
         Random r = new Random();
@@ -248,7 +246,6 @@ class PartitionAlgs {
 
         int[] currSolution = solution;
 
-        int MAX_ITER = 10000;
         for(int i=0; i<MAX_ITER; i++) {
             int ind1 = r.nextInt(arr.length-1);
             int ind2;
@@ -283,8 +280,33 @@ class PartitionAlgs {
           solution[j] = r.nextInt(arr.length);
       }
 
-      
+      int[] globalSolution = solution;
+
+      for (int i = 0; i < MAX_ITER; i++) {
+        int[] currentSolution = solution;
+
+        int j = r.nextInt(arr.length);
+        int k;
+
+        do {
+          k = r.nextInt(arr.length);
+        } while (currentSolution[j] == k);
+
+        currentSolution[j] = k;
+
+        if (residuePP(arr, currentSolution) < residuePP(arr, solution))
+          solution = currentSolution;
+        else if (r.nextDouble() < Math.exp(-(residuePP(arr, currentSolution) -
+          residuePP(arr, solution)) / cooling(i))) {
+          solution = currSolution;
+        }
+        if (residuePP(arr, solution) < residuePP(arr, globalSolution))
+          globalSolution = solution;
+      }
+
+      return residuePP(arr, globalSolution);
     }
+  }
 }
 
 public class Partition {
