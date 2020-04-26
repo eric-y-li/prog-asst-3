@@ -14,13 +14,13 @@ class RandomArray {
 }
 
 class MaxHeap {
-    private ArrayList<Integer> heap;
+    private ArrayList<Long> heap;
 
     public MaxHeap() {
-        heap = new ArrayList<Integer>();
+        heap = new ArrayList<Long>();
     }
 
-    public MaxHeap(ArrayList<Integer> arr) {
+    public MaxHeap(ArrayList<Long> arr) {
         heap = arr;
         for (int i = (heap.size()-1)/2; i>=0; i--) {
             heapify(i);
@@ -28,19 +28,19 @@ class MaxHeap {
     }
 
     private int parent(int node) {
-        return (node-1)/2;
+        return (node - 1) / 2;
     }
 
     private int left(int node) {
-        return 2*node + 1;
+        return 2 * node + 1;
     }
 
     private int right(int node) {
-        return 2*node + 2;
+        return 2 * node + 2;
     }
 
     private void swap(int i, int j) {
-        int temp = heap.get(i);
+        long temp = heap.get(i);
         heap.set(i, heap.get(j));
         heap.set(j, temp);
     }
@@ -64,18 +64,18 @@ class MaxHeap {
         return heap.size();
     }
 
-    public int deleteMax() {
-        int max = heap.get(0);
-        heap.set(0, heap.get(heap.size()-1));
-        heap.remove(heap.size()-1);
+    public long deleteMax() {
+        long max = heap.get(0);
+        heap.set(0, heap.get(heap.size() - 1));
+        heap.remove(heap.size() - 1);
         heapify(0);
         return max;
     }
 
-    public void insert(int val) {
+    public void insert(long val) {
         heap.add(val);
-        int currentNode = heap.size()-1;
-        while (currentNode != 0 && heap.get(parent(currentNode))<heap.get(currentNode)) {
+        int currentNode = heap.size() - 1;
+        while (currentNode != 0 && heap.get(parent(currentNode)) < heap.get(currentNode)) {
             swap(parent(currentNode), currentNode);
             currentNode = parent(currentNode);
         }
@@ -85,7 +85,7 @@ class MaxHeap {
         return Arrays.toString(heap.toArray());
     }
 
-    public ArrayList<Integer> getHeap() {
+    public ArrayList<Long> getHeap() {
         return heap;
     }
 }
