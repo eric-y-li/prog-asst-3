@@ -8,9 +8,11 @@ import java.util.concurrent.ThreadLocalRandom;
 class MaxHeap {
   private ArrayList<Long> heap;
 
+
   public MaxHeap() {
     heap = new ArrayList<Long>();
   }
+
 
   public MaxHeap(ArrayList<Long> arr) {
     heap = arr;
@@ -19,23 +21,28 @@ class MaxHeap {
     }
   }
 
+
   private int parent(int node) {
     return (node - 1) / 2;
   }
+
 
   private int left(int node) {
     return 2 * node + 1;
   }
 
+
   private int right(int node) {
     return 2 * node + 2;
   }
+
 
   private void swap(int i, int j) {
     long temp = heap.get(i);
     heap.set(i, heap.get(j));
     heap.set(j, temp);
   }
+
 
   private void heapify(int root) {
     int left = left(root);
@@ -52,9 +59,11 @@ class MaxHeap {
     }
   }
 
+
   public int getSize() {
     return heap.size();
   }
+
 
   public long deleteMax() {
     long max = heap.get(0);
@@ -63,6 +72,7 @@ class MaxHeap {
     heapify(0);
     return max;
   }
+
 
   public void insert(long val) {
     heap.add(val);
@@ -73,9 +83,11 @@ class MaxHeap {
     }
   }
 
+
   public String toString() {
     return Arrays.toString(heap.toArray());
   }
+
 
   public ArrayList<Long> getHeap() {
     return heap;
@@ -87,6 +99,16 @@ class MaxHeap {
 class PartitionAlgs {
   private static int MAX_ITER = 25000;
   private PartitionAlgs(){};
+
+
+  public static long[] copyTo(long[] arr1, long[] arr2) {
+    if (arr1.length != arr2.length) throw
+      new IllegalArgumentException("Size exception.");
+    for (int i = 0; i < arr1.length; i++) {
+      arr2[i] = arr1[i];
+    }
+    return arr2;
+  }
 
 
   public static long residue(long[] arr, long[] signs) {
@@ -134,12 +156,10 @@ class PartitionAlgs {
     long[] currSolution = new long[arr.length];
 
     for (int i = 0; i < MAX_ITER; i++) {
-      for (int j = 0; j < arr.length; j++) {
+      for (int j = 0; j < arr.length; j++)
         currSolution[j] = rand[r.nextInt(2)];
-      }
-      if (residue(arr, currSolution) < residue(arr, solution)) {
-          solution = currSolution;
-      }
+      if (residue(arr, currSolution) < residue(arr, solution))
+        solution = copyTo(currSolution, solution);
     }
 
     return residue(arr, solution);
@@ -162,9 +182,8 @@ class PartitionAlgs {
         Integer z = new Integer(r.nextInt(arr.length));
         currPrePartition[j] = z.longValue();
       }
-      if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
-        solution = currPrePartition;
-      }
+      if (residuePP(arr, currPrePartition) < residuePP(arr, solution))
+        solution = copyTo(currPrePartition, solution);
     }
 
     return residuePP(arr, solution);
@@ -176,11 +195,11 @@ class PartitionAlgs {
     long[] rand = {-1, 1};
 
     long[] solution = new long[arr.length];
-    for (int j = 0; j < arr.length; j++) {
+    for (int j = 0; j < arr.length; j++)
       solution[j] = rand[r.nextInt(2)];
-    }
 
-    long[] currSolution = solution;
+    long[] currSolution = new long[arr.length];
+    currSolution = copyTo(solution, currSolution);
 
     for (int i = 0; i < MAX_ITER; i++) {
       int ind1 = r.nextInt(arr.length);
@@ -191,11 +210,12 @@ class PartitionAlgs {
       currSolution[ind1] *= -1;
       if (r.nextInt(2) == 1) currSolution[ind2] *= -1;
       if (residue(arr, currSolution) < residue(arr, solution)) {
-        solution = currSolution;
+        solution = copyTo(currSolution, solution);
       }
     }
     return residue(arr, solution);
   }
+
 
   public static long hillClimbPP(long[] arr) {
     Random r = new Random();
@@ -208,7 +228,8 @@ class PartitionAlgs {
 
     long residue = residuePP(arr, solution);
 
-    long[] currPrePartition = solution;
+    long[] currPrePartition = new long[arr.length];
+    currPrePartition = copyTo(solution, currPrePartition);
 
     for (int i = 0; i < MAX_ITER; i++) {
       int ind1 = r.nextInt(arr.length);
@@ -219,7 +240,7 @@ class PartitionAlgs {
       currPrePartition[ind1] = ind2;
       if (residuePP(arr, currPrePartition) < residuePP(arr, solution)) {
         residue = residuePP(arr, currPrePartition);
-        solution = currPrePartition;
+        solution = copyTo(currPrePartition, solution);
       }
     }
     return residue;
@@ -236,13 +257,14 @@ class PartitionAlgs {
     long[] rand = {-1,1};
 
     long[] solution = new long[arr.length];
-    for (int j = 0; j < arr.length; j++) {
+    for (int j = 0; j < arr.length; j++)
         solution[j] = rand[r.nextInt(2)];
-    }
 
-    long[] globalSol = solution;
+    long[] globalSol = new long[arr.length];
+    globalSol = copyTo(solution, globalSol);
 
-    long[] currSolution = solution;
+    long[] currSolution = new long[arr.length];
+    currSolution = copyTo(solution, currSolution);
 
     for(int i = 0; i < MAX_ITER; i++) {
       int ind1 = r.nextInt(arr.length);
@@ -252,17 +274,14 @@ class PartitionAlgs {
       } while(ind1 == ind2);
       currSolution[ind1] *= -1;
       if (r.nextInt(2) == 1) currSolution[ind2] *= -1;
-      if (residue(arr, currSolution) < residue(arr, solution)) {
-        solution = currSolution;
-      }
-      else {
-        if (r.nextDouble() < Math.exp(-(residue(arr, currSolution) -
-          residue(arr, solution)) / cooling(i))) {
-          solution = currSolution;
-        }
+      if (residue(arr, currSolution) < residue(arr, solution))
+        solution = copyTo(currSolution, solution);
+      else if (r.nextDouble() < Math.exp(-(residue(arr, currSolution) -
+        residue(arr, solution)) / cooling(i))) {
+        solution = copyTo(currSolution, solution);
       }
       if (residue(arr, solution) < residue(arr, globalSol)) {
-          globalSol = solution;
+          globalSol = copyTo(solution, globalSol);
       }
     }
 
@@ -279,10 +298,12 @@ class PartitionAlgs {
       solution[j] = z.longValue();
     }
 
-    long[] globalSolution = solution;
+    long[] globalSolution = new long[arr.length];
+    globalSolution = copyTo(solution, globalSolution);
 
     for (int i = 0; i < MAX_ITER; i++) {
-      long[] currentSolution = solution;
+      long[] currentSolution = new long[arr.length];
+      currentSolution = copyTo(solution, currentSolution);
 
       int j = r.nextInt(arr.length);
       int k;
@@ -295,13 +316,13 @@ class PartitionAlgs {
       currentSolution[j] = z.longValue();
 
       if (residuePP(arr, currentSolution) < residuePP(arr, solution))
-        solution = currentSolution;
+        solution = copyTo(currentSolution, solution);
       else if (r.nextDouble() < Math.exp(-(residuePP(arr, currentSolution) -
         residuePP(arr, solution)) / cooling(i))) {
-        solution = currentSolution;
+        solution = copyTo(currentSolution, solution);
       }
       if (residuePP(arr, solution) < residuePP(arr, globalSolution))
-        globalSolution = solution;
+        globalSolution = copyTo(solution, globalSolution);
     }
 
     return residuePP(arr, globalSolution);
@@ -334,6 +355,7 @@ public class Partition {
       System.out.println();
     }
   }
+
 
   public static void main(String[] args) {
     tests();
