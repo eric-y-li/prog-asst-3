@@ -1,19 +1,8 @@
-import java.util.*;
-import java.util.concurrent.*;
-
-
-class RandomArray {
-  private RandomArray(){}
-
-  public static int[] generateArray(int size) {
-    Random r = new Random();
-    int[] arr = new int[size];
-    for (int i=1; i<size; i++) {
-        arr[i] = r.nextInt((int)(Math.pow(2,29)));
-    }
-    return arr;
-  }
-}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.lang.Math;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 class MaxHeap {
@@ -25,8 +14,8 @@ class MaxHeap {
 
   public MaxHeap(ArrayList<Long> arr) {
     heap = arr;
-    for (int i = (heap.size()-1)/2; i>=0; i--) {
-        heapify(i);
+    for (int i = (heap.size() - 1) / 2; i >= 0; i--) {
+      heapify(i);
     }
   }
 
