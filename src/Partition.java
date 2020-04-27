@@ -357,7 +357,59 @@ public class Partition {
   }
 
 
+  public static void timeTests() {
+    for (int i = 0; i < ITERS; i++) {
+      long[] arr = new long[ITERS];
+      ArrayList<Long> arrlist = new ArrayList<Long>(ITERS);
+
+      for (int j = 0; j < ITERS; j++) {
+        long r = ThreadLocalRandom.current().nextLong((long)Math.pow(10,12));
+        arr[j] = r;
+        arrlist.add(r);
+      }
+
+      long start = System.nanoTime();
+      long x = PartitionAlgs.kk(arrlist);
+      long kkTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.repeatedRandom(arr);
+      long rrTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.repeatedRandomPP(arr);
+      long rrppTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.hillClimb(arr);
+      long hcTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.hillClimbPP(arr);
+      long hcppTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.simAnneal(arr);
+      long saTime = (System.nanoTime() - start) / 1000000;
+
+      start = System.nanoTime();
+      x = PartitionAlgs.simAnnealPP(arr);
+      long sappTime = (System.nanoTime() - start) / 1000000;
+
+      System.out.println("KK: " + kkTime);
+      System.out.println("Repeated random: " + rrTime);
+      System.out.println("Repeated random (PP): " + rrppTime);
+      System.out.println("Hill climb: " + hcTime);
+      System.out.println("Hill climb (PP): " + hcppTime);
+      System.out.println("Simulated annealing: " + saTime);
+      System.out.println("Simulated annealing (PP): " + sappTime);
+      System.out.println();
+    }
+  }
+
+
   public static void main(String[] args) {
-    tests();
+    // tests();
+    timeTests();
   }
 }
