@@ -1,7 +1,10 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.lang.Math;
+import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -408,8 +411,49 @@ public class Partition {
   }
 
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws FileNotFoundException {
     // tests();
-    timeTests();
+    // timeTests();
+    int alg = Integer.parseInt(args[1]);
+    String path = args[2];
+
+    File file = new File(path);
+    Scanner fileScanner = new Scanner(file);
+
+    long[] arr = new long[100];
+    ArrayList<Long> arrlist = new ArrayList<Long>();
+
+    for(int i = 0; i < 100; i++) {
+      long elt = fileScanner.nextLong();
+      arr[i] = elt;
+      arrlist.add(elt);
+    }
+
+    long residue = 0;
+
+    switch(alg) {
+      case 0:
+        residue = PartitionAlgs.kk(arrlist);
+        break;
+      case 1:
+        residue = PartitionAlgs.repeatedRandom(arr);
+        break;
+      case 2:
+        residue = PartitionAlgs.hillClimb(arr);
+        break;
+      case 3:
+        residue = PartitionAlgs.simAnneal(arr);
+        break;
+      case 11:
+        residue = PartitionAlgs.repeatedRandomPP(arr);
+        break;
+      case 12:
+        residue = PartitionAlgs.hillClimbPP(arr);
+        break;
+      case 13:
+        residue = PartitionAlgs.simAnnealPP(arr);
+    }
+
+    System.out.println(residue);
   }
 }
