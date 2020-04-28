@@ -333,7 +333,7 @@ class PartitionAlgs {
 }
 
 
-public class Partition {
+public class partition {
   private static int ITERS = 100;
 
 
